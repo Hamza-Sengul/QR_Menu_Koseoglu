@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Paneli</h1>
+
+        <h2>Kategori Ekle</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="catname">Kategori Adı:</label>
+                <input type="text" class="form-control" id="catname" name="catname" required>
+            </div>
+            <div class="form-group">
+                <label for="catimage">Kategori Resmi:</label>
+                <input type="file" class="form-control" id="catimage" name="catimage" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Ekle</button>
+        </form>
+<br><br>
+        <h2>Ürün Ekle</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="productname">Ürün Adı:</label>
+                <input type="text" class="form-control" id="productname" name="productname" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Fiyat:</label>
+                <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+            </div>
+            <div class="form-group">
+                <label for="productimage">Ürün Resmi:</label>
+                <input type="file" class="form-control" id="productimage" name="productimage" required>
+            </div>
+            <div class="form-group">
+                <label for="detail">Detay:</label>
+                <input type="text" class="form-control" id="detail" name="detail" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Kategori:</label>
+                <select class="form-control" id="category" name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.catname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Ekle</button>
+        </form>
+<br><br>
+        <h2>Mevcut Kategoriler</h2>
+        <ul class="list-group">
+            {% for category in categories %}
+                <li class="list-group-item">
+                    <img src="{{ category.catimage.url }}" alt="{{ category.catname }}" style="width: 50px; height: 50px;">
+                    {{ category.catname }}
+                    <a href="{% url 'edit_category' category.id %}" class="btn btn-secondary btn-sm">Düzenle</a>
+                </li>
+            {% endfor %}
+        </ul>
+<br><br>
+        <h2>Mevcut Ürünler</h2>
+        <ul class="list-group">
+            {% for product in products %}
+    <li class="list-group-item">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 50px; height: 50px;">
+        {{ product.name }} - {{ product.price }} - {{ product.detail }} - {{ product.category.catname }}
+        
+        <a href="{% url 'edit_product' product.id %}" class="btn btn-secondary btn-sm">Düzenle</a>
+    </li>
+{% endfor %}
+        </ul>
+<br><br>
+        <h2>Logo Ekle</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="logoimage">Logo Resmi:</label>
+            <input type="file" class="form-control" id="logoimage" name="logoimage" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ekle</button>
+    </form>
+
+    <!-- Display Latest Logo -->
+    <h2>Mevcut Logo</h2>
+    {% if latest_logo %}
+        <img src="{{ latest_logo.image.url }}" alt="Logo" style="width: 150px; height: 150px;">
+    {% else %}
+        <p>Henüz bir logo yüklenmedi.</p>
+    {% endif %}
+
+    <br><br>
+
+    <h2>Geri Bildirimler</h2>
+    <ul class="list-group">
+        {% for feedback in feedbacks %}
+            <li class="list-group-item">
+                <strong>{{ feedback.name }} {{ feedback.surname }}</strong> ({{ feedback.email }})
+                <p>{{ feedback.message }}</p>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ feedback.email }}&su=Re: Feedback&body={{ feedback.message }}" target="_blank" class="btn btn-secondary btn-sm">Yanıtla</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+
+    <br><br>
+<h2>Ürün Tıklanma Sayıları</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Ürün Resmi</th>
+            <th scope="col">Ürün Adı</th>
+            <th scope="col">Tıklanma Sayısı</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <td><img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 50px; height: 50px;"></td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.click_count }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    </div>
+
+
+    
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
