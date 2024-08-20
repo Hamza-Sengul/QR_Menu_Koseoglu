@@ -23,19 +23,25 @@
         <h2>{{ product.category.catname }}</h2>
         {% endif %}
         <div class="product-card" onclick="openPopup('{{ product.name }}', '{{ product.detail }}', '{{ product.price }}', '{{ product.image.url }}')">
-            <div class="row no-gutters">
-                <div class="col-md-4">
-                    <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}">
-                </div>
-                <div class="col-md-8">
-                    <div class="product-body">
-                        <h5 class="product-title">{{ product.name }}</h5>
-                        <p class="product-detail">{{ product.detail }}</p>
-                        <p class="product-price"><strong>{{ product.price }} ₺</strong></p>
-                    </div>
-                </div>
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}">
+        </div>
+        <div class="col-md-8">
+            <div class="product-body">
+                <h5 class="product-title">{{ product.name }}</h5>
+                <p class="product-detail">
+                    {% if product.detail|length > 30 %}
+                        {{ product.detail|slice:":30" }}...
+                    {% else %}
+                        {{ product.detail }}
+                    {% endif %}
+                </p>
+                <p class="product-price"><strong>{{ product.price }} ₺</strong></p>
             </div>
         </div>
+    </div>
+</div>
         {% endfor %}
     </div>
     {% endif %}
